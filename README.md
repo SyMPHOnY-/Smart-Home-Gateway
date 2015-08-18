@@ -5,5 +5,5 @@ The main goal of SyMPHOnY project is to create a demonstrator of smart home gate
 
 The demonstrator is able to run on OpenWRT-based standard IP home gateway (router) and on Linux Ubuntu-based device (e.g. netbook) as well. As the primary communication platform wireless and wired technologies like Wireless M-Bus, IEEE 802.11, Zigbee, Bluetooth, Ethernet, IMS, 3G/4G broadband, etc. are utilized.
 
-
+[Want to learn more?](https://github.com/SyMPHOnY-/Smart-Home-Gateway/wiki)
 
