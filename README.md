@@ -1,3 +1,3 @@
 # Smart-Home-Gateway
-![My image](https://cloud.githubusercontent.com/assets/7251912/9324558/03f40946-458c-11e5-944f-2bd8384ca644.jpg)
+![sh_gw_github](https://cloud.githubusercontent.com/assets/7251912/9324688/d6f00a48-458c-11e5-95eb-202db1b189ad.png)
 Test
