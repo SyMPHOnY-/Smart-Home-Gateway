@@ -7,3 +7,4 @@ The demonstrator is able to run on OpenWRT-based standard IP home gateway (route
 
 Want to learn more? [See the wiki.](https://github.com/SyMPHOnY-/Smart-Home-Gateway/wiki)
 
+![github_2](https://cloud.githubusercontent.com/assets/7251912/9358425/45b7b8ae-468c-11e5-9e7f-5939ff43197e.png)
