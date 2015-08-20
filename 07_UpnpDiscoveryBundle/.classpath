@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry excluding="**/.svn/**|**/CVS/**" including="**/*.java" kind="src" path="src"/>
+	<classpathentry kind="con" path="org.knopflerfish.eclipse.core.EXECUTION_ENVIRONMENT_CONTAINER"/>
+	<classpathentry kind="con" path="org.knopflerfish.eclipse.core.FRAMEWORK_CONTAINER">
+		<accessrules>
+			<accessrule kind="accessible" pattern="org/osgi/framework/"/>
+			<accessrule kind="nonaccessible" pattern="**/*"/>
+		</accessrules>
+	</classpathentry>
+	<classpathentry kind="lib" path="refLib/cling-core-2.0.1.jar"/>
+	<classpathentry kind="lib" path="refLib/event_all-4.0.1.jar"/>
+	<classpathentry kind="lib" path="refLib/event_api-4.0.1.jar"/>
+	<classpathentry kind="lib" path="refLib/http-2.2.1.jar"/>
+	<classpathentry kind="lib" path="refLib/javax.servlet-api-3.1.0.jar"/>
+	<classpathentry kind="lib" path="refLib/javax.xml-1.3.4.jar"/>
+	<classpathentry kind="lib" path="refLib/org-apache-commons-logging.jar"/>
+	<classpathentry kind="lib" path="refLib/org.apache.httpcomponents.httpclient_4.4.jar"/>
+	<classpathentry kind="lib" path="refLib/org.apache.httpcomponents.httpcore_4.4.1.jar"/>
+	<classpathentry kind="lib" path="refLib/seamless-http-1.1.0.jar"/>
+	<classpathentry kind="lib" path="refLib/seamless-util-1.1.0.jar"/>
+	<classpathentry kind="lib" path="refLib/seamless-xml-1.1.0.jar"/>
+	<classpathentry kind="lib" path="refLib/xercesImpl-2.8.0.jar"/>
+	<classpathentry kind="output" path="out"/>
+</classpath>

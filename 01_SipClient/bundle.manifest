@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Export-Package: cz.vutbr.wislab.symphony.sip.util
+Bundle-ClassPath: ., lib/log4j-1.2.8.jar, lib/jain-sip-sdp-1.2.2356.ja
+ r, lib/event_all-4.0.1.jar, lib/event_api-4.0.1.jar
+Bundle-Version: 0.9.6
+Bundle-Name: SipClient
+Bundle-ManifestVersion: 2
+Bundle-Activator: cz.vutbr.wislab.symphony.sip.util.Activator
+Import-Package: org.osgi.framework, javax.net.ssl,org.osgi.service.eve
+ nt
+Bundle-SymbolicName: SipClient
+

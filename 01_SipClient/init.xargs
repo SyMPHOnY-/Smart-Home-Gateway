@@ -1,0 +1,7 @@
+-Dorg.osgi.framework.dir=/home/student/workspace/SipClient/fwdir
+-init 
+-initlevel 10
+-install file:/home/student/workspace/SipClient/out/SipClient-1.0.0.jar
+-startlevel 10
+-launch 
+-start file:/home/student/workspace/SipClient/out/SipClient-1.0.0.jar

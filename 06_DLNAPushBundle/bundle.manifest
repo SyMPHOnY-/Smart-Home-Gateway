@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bundle-ClassPath: ., refLib/cling-core-2.0.1.jar, refLib/http-2.2.1.ja
+ r, refLib/javax.servlet-api-3.1.0.jar, refLib/javax.xml-1.3.4.jar, re
+ fLib/org-apache-commons-logging.jar, refLib/org.apache.httpcomponents
+ .httpclient_4.4.jar, refLib/org.apache.httpcomponents.httpcore_4.4.1.
+ jar, refLib/seamless-http-1.1.0.jar, refLib/seamless-util-1.1.0.jar, 
+ refLib/seamless-xml-1.1.0.jar, refLib/xercesImpl-2.8.0.jar
+Bundle-Version: 0.9.0
+Bundle-Name: DLNAPushBundle
+Bundle-ManifestVersion: 2
+Import-Package: org.osgi.framework, org.xml.sax, org.w3c.dom, javax.ne
+ t.ssl
+Bundle-SymbolicName: DLNAPushBundle
+Bundle-Activator: cz.vutbr.wislab.symphony.dlna.util.Activator
+Export-Package: cz.vutbr.wislab.symphony.dlna.util
+

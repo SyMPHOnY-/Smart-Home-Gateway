@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry excluding="**/.svn/**|**/CVS/**" including="**/*.java" kind="src" path="src"/>
+	<classpathentry kind="con" path="org.knopflerfish.eclipse.core.EXECUTION_ENVIRONMENT_CONTAINER"/>
+	<classpathentry kind="con" path="org.knopflerfish.eclipse.core.FRAMEWORK_CONTAINER">
+		<accessrules>
+			<accessrule kind="accessible" pattern="org/osgi/framework/"/>
+			<accessrule kind="nonaccessible" pattern="**/*"/>
+		</accessrules>
+	</classpathentry>
+	<classpathentry kind="lib" path="/home/student/workspace/json-simple/json-simple-1.1.1.jar"/>
+	<classpathentry kind="lib" path="/home/student/Knopflerfish/knopflerfish_osgi_5.1.0/osgi/jars/event/event_all-4.0.1.jar"/>
+	<classpathentry kind="lib" path="/home/student/Knopflerfish/knopflerfish_osgi_5.1.0/osgi/jars/log/log_all-5.0.0.jar"/>
+	<classpathentry kind="lib" path="/home/student/workspace/UpnpDiscoveryBundle/refLib/cling-core-2.0.1.jar"/>
+	<classpathentry kind="con" path="org.knopflerfish.eclipse.core.BUNDLE_CONTAINER/SQLite">
+		<accessrules>
+			<accessrule kind="accessible" pattern="cz/vutbr/wislab/symphony/sqlite/"/>
+			<accessrule kind="nonaccessible" pattern="**/*"/>
+		</accessrules>
+	</classpathentry>
+	<classpathentry kind="con" path="org.knopflerfish.eclipse.core.BUNDLE_CONTAINER/SipClient">
+		<accessrules>
+			<accessrule kind="accessible" pattern="cz/vutbr/wislab/symphony/sip/util/"/>
+			<accessrule kind="nonaccessible" pattern="**/*"/>
+		</accessrules>
+	</classpathentry>
+	<classpathentry kind="con" path="org.knopflerfish.eclipse.core.BUNDLE_CONTAINER/UpnpDiscoveryBundle">
+		<accessrules>
+			<accessrule kind="accessible" pattern="cz/vutbr/wislab/symphony/upnp/util/"/>
+			<accessrule kind="nonaccessible" pattern="**/*"/>
+		</accessrules>
+	</classpathentry>
+	<classpathentry kind="con" path="org.knopflerfish.eclipse.core.BUNDLE_CONTAINER/TVScreenGenerator">
+		<accessrules>
+			<accessrule kind="accessible" pattern="cz/vutbr/wislab/symphony/TVScreenGenerator/util/"/>
+			<accessrule kind="nonaccessible" pattern="**/*"/>
+		</accessrules>
+	</classpathentry>
+	<classpathentry kind="con" path="org.knopflerfish.eclipse.core.BUNDLE_CONTAINER/DLNAPushBundle">
+		<accessrules>
+			<accessrule kind="accessible" pattern="cz/vutbr/wislab/symphony/dlna/util/"/>
+			<accessrule kind="nonaccessible" pattern="**/*"/>
+		</accessrules>
+	</classpathentry>
+	<classpathentry kind="output" path="out"/>
+</classpath>

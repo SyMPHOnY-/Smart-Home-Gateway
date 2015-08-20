@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bundlejar>
+<resource dst="" pattern=".*\.class" src="/DLNAPushBundle/out" type="0"/>
+<resource dst="refLib/cling-core-2.0.1.jar" src="/DLNAPushBundle/refLib/cling-core-2.0.1.jar" type="1"/>
+<resource dst="refLib/http-2.2.1.jar" src="/DLNAPushBundle/refLib/http-2.2.1.jar" type="1"/>
+<resource dst="refLib/javax.servlet-api-3.1.0.jar" src="/DLNAPushBundle/refLib/javax.servlet-api-3.1.0.jar" type="1"/>
+<resource dst="refLib/javax.xml-1.3.4.jar" src="/DLNAPushBundle/refLib/javax.xml-1.3.4.jar" type="1"/>
+<resource dst="refLib/org-apache-commons-logging.jar" src="/DLNAPushBundle/refLib/org-apache-commons-logging.jar" type="1"/>
+<resource dst="refLib/org.apache.httpcomponents.httpclient_4.4.jar" src="/DLNAPushBundle/refLib/org.apache.httpcomponents.httpclient_4.4.jar" type="1"/>
+<resource dst="refLib/org.apache.httpcomponents.httpcore_4.4.1.jar" src="/DLNAPushBundle/refLib/org.apache.httpcomponents.httpcore_4.4.1.jar" type="1"/>
+<resource dst="refLib/seamless-http-1.1.0.jar" src="/DLNAPushBundle/refLib/seamless-http-1.1.0.jar" type="1"/>
+<resource dst="refLib/seamless-util-1.1.0.jar" src="/DLNAPushBundle/refLib/seamless-util-1.1.0.jar" type="1"/>
+<resource dst="refLib/seamless-xml-1.1.0.jar" src="/DLNAPushBundle/refLib/seamless-xml-1.1.0.jar" type="1"/>
+<resource dst="refLib/xercesImpl-2.8.0.jar" src="/DLNAPushBundle/refLib/xercesImpl-2.8.0.jar" type="1"/>
+</bundlejar>

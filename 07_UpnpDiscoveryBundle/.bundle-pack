@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bundlejar>
+<resource dst="" pattern=".*\.class" src="/UpnpDiscoveryBundle/out" type="0"/>
+<resource dst="refLib/cling-core-2.0.1.jar" src="/UpnpDiscoveryBundle/refLib/cling-core-2.0.1.jar" type="1"/>
+<resource dst="refLib/event_all-4.0.1.jar" src="/UpnpDiscoveryBundle/refLib/event_all-4.0.1.jar" type="1"/>
+<resource dst="refLib/event_api-4.0.1.jar" src="/UpnpDiscoveryBundle/refLib/event_api-4.0.1.jar" type="1"/>
+<resource dst="refLib/http-2.2.1.jar" src="/UpnpDiscoveryBundle/refLib/http-2.2.1.jar" type="1"/>
+<resource dst="refLib/javax.servlet-api-3.1.0.jar" src="/UpnpDiscoveryBundle/refLib/javax.servlet-api-3.1.0.jar" type="1"/>
+<resource dst="refLib/javax.xml-1.3.4.jar" src="/UpnpDiscoveryBundle/refLib/javax.xml-1.3.4.jar" type="1"/>
+<resource dst="refLib/org-apache-commons-logging.jar" src="/UpnpDiscoveryBundle/refLib/org-apache-commons-logging.jar" type="1"/>
+<resource dst="refLib/org.apache.httpcomponents.httpclient_4.4.jar" src="/UpnpDiscoveryBundle/refLib/org.apache.httpcomponents.httpclient_4.4.jar" type="1"/>
+<resource dst="refLib/org.apache.httpcomponents.httpcore_4.4.1.jar" src="/UpnpDiscoveryBundle/refLib/org.apache.httpcomponents.httpcore_4.4.1.jar" type="1"/>
+<resource dst="refLib/seamless-http-1.1.0.jar" src="/UpnpDiscoveryBundle/refLib/seamless-http-1.1.0.jar" type="1"/>
+<resource dst="refLib/seamless-util-1.1.0.jar" src="/UpnpDiscoveryBundle/refLib/seamless-util-1.1.0.jar" type="1"/>
+<resource dst="refLib/seamless-xml-1.1.0.jar" src="/UpnpDiscoveryBundle/refLib/seamless-xml-1.1.0.jar" type="1"/>
+<resource dst="refLib/xercesImpl-2.8.0.jar" src="/UpnpDiscoveryBundle/refLib/xercesImpl-2.8.0.jar" type="1"/>
+</bundlejar>

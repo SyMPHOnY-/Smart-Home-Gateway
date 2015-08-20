@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Export-Package: cz.vutbr.wislab.symphony.upnp.util
+Bundle-ClassPath: ., refLib/cling-core-2.0.1.jar, refLib/event_all-4.0
+ .1.jar, refLib/event_api-4.0.1.jar, refLib/http-2.2.1.jar, refLib/jav
+ ax.servlet-api-3.1.0.jar, refLib/javax.xml-1.3.4.jar, refLib/org-apac
+ he-commons-logging.jar, refLib/org.apache.httpcomponents.httpclient_4
+ .4.jar, refLib/org.apache.httpcomponents.httpcore_4.4.1.jar, refLib/s
+ eamless-http-1.1.0.jar, refLib/seamless-util-1.1.0.jar, refLib/seamle
+ ss-xml-1.1.0.jar, refLib/xercesImpl-2.8.0.jar
+Bundle-Version: 0.9.0
+Bundle-Name: UpnpDiscoveryBundle
+Bundle-ManifestVersion: 2
+Bundle-Activator: cz.vutbr.wislab.symphony.upnp.util.Activator
+Bundle-SymbolicName: UpnpDiscoveryBundle
+Import-Package: org.osgi.framework, org.xml.sax, org.w3c.dom, javax.ne
+ t.ssl, org.osgi.service.event
+

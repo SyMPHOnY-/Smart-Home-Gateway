@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-Version: 0.9.4
+Bundle-Name: TVScreenGenerator
+Bundle-ManifestVersion: 2
+Bundle-Activator: cz.vutbr.wislab.symphony.TVScreenGenerator.util.Acti
+ vator
+Import-Package: org.osgi.framework, javax.imageio, javax.imageio.stream
+Bundle-SymbolicName: TVScreenGenerator
+Export-Package: cz.vutbr.wislab.symphony.TVScreenGenerator.util
+

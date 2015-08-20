@@ -1,0 +1,3 @@
+-Forg.knopflerfish.bundle.cm.store=cmdir
+-Forg.osgi.framework.startlevel.beginning=10
+-Forg.knopflerfish.prodver=7.1.2

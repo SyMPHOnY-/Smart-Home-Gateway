@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bundlejar>
+<resource dst="" pattern=".*\.class" src="/SipClient/out" type="0"/>
+<resource dst="lib/event_all-4.0.1.jar" src="/SipClient/lib/event_all-4.0.1.jar" type="1"/>
+<resource dst="lib/event_api-4.0.1.jar" src="/SipClient/lib/event_api-4.0.1.jar" type="1"/>
+<resource dst="lib/jain-sip-sdp-1.2.2356.jar" src="/SipClient/lib/jain-sip-sdp-1.2.2356.jar" type="1"/>
+<resource dst="lib/log4j-1.2.8.jar" src="/SipClient/lib/log4j-1.2.8.jar" type="1"/>
+</bundlejar>

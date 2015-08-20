@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-Version: 1.0.0
+Bundle-Name: Core
+Bundle-Activator: Core.Activator
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: Core
+Import-Package: org.osgi.framework, org.osgi.service.event, org.knopfl
+ erfish.service.log, cz.vutbr.wislab.symphony.sqlite, cz.vutbr.wislab.
+ symphony.sip.util, cz.vutbr.wislab.symphony.upnp.util, org.json.simpl
+ e, cz.vutbr.wislab.symphony.TVScreenGenerator.util, cz.vutbr.wislab.s
+ ymphony.dlna.util 
+
