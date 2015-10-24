@@ -5,17 +5,16 @@ import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.Enumeration;
 
-import cz.vutbr.wislab.symphony.sip.client.NotInitializedException;
+
 import cz.vutbr.wislab.symphony.sip.client.SipManager;
 
 public class Main {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		String[] registerField = new String[] {"147.229.147.206", "5060", "udp","193.81.6.69", "5060","a1.net", "tag.smarthome","h0gade.six" };
+		String[] registerField = new String[] {"LocalIP", "LocalPort", "udp","ProxyIP", "ProxyPort","RegistratIP", "sipUsername","SipPassword" };
 
-		//String[] registerField = new String[] {getLocalIP(), "5060", "udp","193.81.6.69", "5060","a1.net", "tag.smarthome","h0gade.six" };
-		//String[] registerField = new String[] { getLocalIP(), "5065", "udp","23.97.214.3", "5060", "23.97.214.3", "pavel","pavel" };
+
 		SipManager.localIp = registerField[0];
 		SipManager.localPort = Integer.valueOf(registerField[1]);
 		SipManager.transport = registerField[2];

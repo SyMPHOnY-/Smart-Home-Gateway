@@ -5,8 +5,6 @@ import gov.nist.javax.sip.clientauthutils.AuthenticationHelper;
 import gov.nist.javax.sip.message.SIPMessage;
 
 
-import java.io.File;
-import java.io.FileInputStream;
 
 import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
@@ -45,11 +43,6 @@ import javax.sip.header.ViaHeader;
 import javax.sip.message.MessageFactory;
 import javax.sip.message.Request;
 import javax.sip.message.Response;
-
-import com.jcraft.jsch.Channel;
-import com.jcraft.jsch.ChannelSftp;
-import com.jcraft.jsch.JSch;
-import com.jcraft.jsch.Session;
 
 import cz.vutbr.wislab.symphony.sip.clientAAA.AccountManagerImpl;
 import cz.vutbr.wislab.symphony.sip.clientAAA.DigestClientAuthenticationMethod;
@@ -309,7 +302,7 @@ public class SipManager implements SipListener, SipManagerInterface {
 		Request request = (Request) arg0.getRequest();
 		if (request.getMethod().contains("MESSAGE")) {
 			
-			JsonConverter jsonConv = new JsonConverter();
+			
 			SIPMessage sp = (SIPMessage) request;
 			System.out.println(request.getMethod());
 			sendOk(arg0);
@@ -320,6 +313,7 @@ public class SipManager implements SipListener, SipManagerInterface {
 				if (!message.contains("<isComposing xmlns='urn:ietf:params:xml:ns:im-iscomposing'\n")) {
 					message = crop(message);
 					System.out.println(message);
+					JsonConverter jsonConv = new JsonConverter();
 					jsonConv.recomposeAndSave(message);
 				}
 				
