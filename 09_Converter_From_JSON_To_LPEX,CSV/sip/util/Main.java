@@ -12,7 +12,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		String[] registerField = new String[] {"LocalIP", "LocalPort", "udp","ProxyIP", "ProxyPort","RegistratIP", "sipUsername","SipPassword" };
+		String[] registerField = new String[] {"LocalIP", "LocalPort", "udp", "ProxyIP", "ProxyPort", "RegistratIP", "sipUsername", "SipPassword" };
 
 
 		SipManager.localIp = registerField[0];

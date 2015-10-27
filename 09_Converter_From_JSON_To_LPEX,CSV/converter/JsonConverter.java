@@ -171,90 +171,132 @@ public class JsonConverter {
 	
 	
 	
-	//---------------------------------------------------------------------//
-		// Method for converting parsed JSON to CSV and LPEX				   //
-		//---------------------------------------------------------------------//
 		public void convertAndSave(){
 			
-					// ----------------------------------------------//
-					// COMMON FOR ALL								 //
-					//-----------------------------------------------//
-					String deviceId = "AT0090000000000000000000000016971";
-					String currentUnit[] = new String[5];
-					String currentKWh[] = new String[5];
-					String currentTimeDot;
-					String currentTimeColon;
-					String currentDateDash;
-					String currentDateDot;
-					
-					// ----------------------------------------------//
-					// FOR LPEX										 //
-					//-----------------------------------------------//
-					String lpexMsg;
-					String customerNumber = "";
-					String customerName = "";
-					String uniqueKDNr = "";
-					String gEid = "";
-					String gEKANr = "";
-					String kALINr = "";
-					String line = "";
-					String uniqueLINr = "";
-					String zPB = "AT0090000000000000000000000025029";
-					String classificationNumber = "1-1:1.9.1 P01";
-					String transformerFactor = "";
-					String mPduration = "15";
-					String noName = "2000";
-					String lpexText;
-					
-					
-					// ----------------------------------------------//
-					// FOR CSV										 //
-					//-----------------------------------------------//
-					String csvMsg;
-					String channel = "1-1:1.8.0";
-					String timestamp;
-					String csvText;
-					
-			currentDateDash = getTimeAndDate(outputData.get("System_Current_Time").get(0))[1];
-			currentDateDot = getTimeAndDate(outputData.get("System_Current_Time").get(0))[0];
-			currentTimeColon = getTimeAndDate(outputData.get("System_Current_Time").get(0))[2];
-			currentTimeDot = getTimeAndDate(outputData.get("System_Current_Time").get(0))[3];
-			timestamp = currentTimeDot + "-" + currentDateDot;
+			// ----------------------------------------------//
+			// COMMON FOR ALL								 //
+			//-----------------------------------------------//
+			String deviceId = "AT0090000000000000000000000016971";
+			String currentUnit[] = new String[5];
+			String currentKWh[] = new String[5];
+			String systemObisCode[] = new String[10];
+			String currentTimeDot;
+			String currentTimeColon;
+			String currentDateDash;
+			String currentDateDot;
+
+			
+			// ----------------------------------------------//
+			// FOR LPEX										 //
+			//-----------------------------------------------//
+			String lpexMsg;
+			String customerNumber = "";
+			String customerName = "";
+			String uniqueKDNr = "";
+			String gEid = "";
+			String gEKANr = "";
+			String kALINr = "";
+			String line = "";
+			String uniqueLINr = "";
+			String zPB = "AT0090000000000000000000000025029";
+			//String classificationNumber = "1-1:1.9.1 P01";
+			String transformerFactor = "";
+			String mPduration = "15";
+			String noName = "2000";
+			String lpexText;
 			
 			
+			// ----------------------------------------------//
+			// FOR CSV										 //
+			//-----------------------------------------------//
+			String csvMsg;
+			//String channel = "1-1:1.8.0";
+			String timestamp;
+			String csvText;
 			
-			int j = outputData.get("Units").size();
+	currentDateDash = getTimeAndDate(outputData.get("System_Current_Time").get(0))[1];
+	currentDateDot = getTimeAndDate(outputData.get("System_Current_Time").get(0))[0];
+	currentTimeColon = getTimeAndDate(outputData.get("System_Current_Time").get(0))[2];
+	currentTimeDot = getTimeAndDate(outputData.get("System_Current_Time").get(0))[3];
+	timestamp = currentTimeDot + "-" + currentDateDot;
+	
+	int obisI = outputData.get("System_Obis_Code").size();
+	for (int i = 0; i < obisI; i++) {
+		systemObisCode[i] = (outputData.get("System_Obis_Code").get(i));
+	}
+	
+	int j = outputData.get("Units").size();
+	for (int i = 0; i < j; i++) {
+		currentUnit[i] = (outputData.get("Units").get(i));
+		currentKWh[i] = (outputData.get("Value")).get(i);
+	}
+	
+	if (outputData.get("Device_Type").contains("Electricity_Consumption")) {
+		
+		int indexOfMRT = outputData.get("Description").indexOf("Meter reading total (A+)");
+		int indexOfLPT = outputData.get("Description").indexOf("Load profile 15"+"'"+" total (A+)");
+
+		//LPEX
+		lpexMsg = "";
+		lpexText = "LPEX V2.0 \nDatum;Zeit;Kundennummer;Kundenname;eindeutigeKDNr;GEId;GEKANr;KALINr;Linie;eindeutigeLINr;ZPB;Kennzahl";
+		for (int i = 0; i < 1; i++) {
+			lpexText = lpexText.concat(";Einheit;Wandlerfaktor;MPDauer;Werte; "); 
+		}
+			lpexText = lpexText.concat("\n" + currentDateDot + ";" + currentTimeColon + ";" + customerNumber + ";" + customerName + ";" + uniqueKDNr + ";" + gEid + ";" + gEKANr + ";" + kALINr + ";" + line + ";" + uniqueLINr + ";" + zPB);
+		for (int i = 0; i < 1; i++) {
+			lpexText = lpexText.concat(";" + systemObisCode[indexOfMRT] + ";" + currentUnit[indexOfMRT] + ";" + transformerFactor + ";" + mPduration + ";" + currentKWh[indexOfMRT] + ";" + noName); 
+		}
+		lpexMsg = lpexText;
+		
+		
+	
+		//CSV
+		csvText = "MeteringPointId;Channel;";
+		for (int i = 1; i < 2; i++) {
+			csvText = csvText.concat("Unit;Value;"); 
+		}
+		csvText = csvText.concat("Timestamp \n" + deviceId + ";");
+		for (int i = 1; i < 2; i++) {
+			csvText = csvText.concat(systemObisCode[indexOfLPT] + ";" + currentUnit[indexOfLPT] + ";" + currentKWh[indexOfLPT] + ";");
+		}
+		csvMsg = csvText.concat(currentDateDash + " " + currentTimeColon);		
+	
+		findAndDeleteByDeviceID(deviceId);
+		writeToFile(deviceId + "_" + timestamp + ".csv", csvMsg);
+		writeToFile(deviceId + "_" + timestamp + ".lpex", lpexMsg);
+	} else {
+	
+		
+		
+		
+		//CSV
+		csvText = "MeteringPointId;Channel;";
+		for (int i = 0; i < j; i++) {
+			csvText = csvText.concat("Unit;Value;"); 
+		}
+		csvText = csvText.concat("Timestamp \n" + deviceId + ";");
+		for (int i = 0; i < j; i++) {
+			csvText = csvText.concat(systemObisCode[i] + ";" + currentUnit[i] + ";" + currentKWh[i] + ";");
+		}
+		csvMsg = csvText.concat(currentDateDash + " " + currentTimeColon);
+	
+		//LPEX
+		lpexMsg = "";
+		lpexText = "LPEX V2.0 \nDatum;Zeit;Kundennummer;Kundenname;eindeutigeKDNr;GEId;GEKANr;KALINr;Linie;eindeutigeLINr;ZPB;Kennzahl";
+		for (int i = 0; i < j; i++) {
+			lpexText = lpexText.concat(";Einheit;Wandlerfaktor;MPDauer;Werte; "); 
+		}
+			lpexText = lpexText.concat("\n" + currentDateDot + ";" + currentTimeColon + ";" + customerNumber + ";" + customerName + ";" + uniqueKDNr + ";" + gEid + ";" + gEKANr + ";" + kALINr + ";" + line + ";" + uniqueLINr + ";" + zPB);
 			for (int i = 0; i < j; i++) {
-				currentUnit[i] = (outputData.get("Units").get(i));
-				currentKWh[i] = (outputData.get("Value")).get(i);
+				lpexText = lpexText.concat(";" + systemObisCode[i] + ";" + currentUnit[i] + ";" + transformerFactor + ";" + mPduration + ";" + currentKWh[i] + ";" + noName); 
 			}
-			
-			
-			//CSV
-			csvText = "MeteringPointId;Channel;";
-			for (int i = 0; i < j; i++) {
-				csvText = csvText.concat("Unit;Value;"); 
-			}
-			csvText = csvText.concat("Timestamp \n" + deviceId + ";" + channel + ";");
-			for (int i = 0; i < j; i++) {
-				csvText = csvText.concat(currentUnit[i] + ";" + currentKWh[i] + ";");
-			}
-			csvMsg = csvText.concat(currentDateDash + " " + currentTimeColon);
-			
-			//LPEX
-			lpexMsg = "";
-			lpexText = "LPEX V2.0 \nDatum;Zeit;Kundennummer;Kundenname;eindeutigeKDNr;GEId;GEKANr;KALINr;Linie;eindeutigeLINr;ZPB;Kennzahl";
-			for (int i = 0; i < j; i++) {
-				lpexText = lpexText.concat(";Einheit;Wandlerfaktor;MPDauer;Werte; "); 
-			}
-				lpexText = lpexText.concat("\n" + currentDateDot + ";" + currentTimeColon + ";" + customerNumber + ";" + customerName + ";" + uniqueKDNr + ";" + gEid + ";" + gEKANr + ";" + kALINr + ";" + line + ";" + uniqueLINr + ";" + zPB + ";" + classificationNumber);
-				for (int i = 0; i < j; i++) {
-					lpexText = lpexText.concat(";" + currentUnit[i] + ";" + transformerFactor + ";" + mPduration + ";" + currentKWh[i] + ";" + noName); 
-				}
 			lpexMsg = lpexText;
 			findAndDeleteByDeviceID(deviceId);
 			writeToFile(deviceId + "_" + timestamp + ".csv", csvMsg);
 			writeToFile(deviceId + "_" + timestamp + ".lpex", lpexMsg);	
+		}
+	
+	
 
-		}							
+}				
 }
