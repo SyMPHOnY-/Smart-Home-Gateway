@@ -12,5 +12,6 @@
 	<classpathentry exported="true" kind="lib" path="lib/jain-sip-sdp-1.2.2356.jar"/>
 	<classpathentry kind="lib" path="lib/event_all-4.0.1.jar"/>
 	<classpathentry kind="lib" path="lib/event_api-4.0.1.jar"/>
+	<classpathentry kind="lib" path="/home/student/Knopflerfish/knopflerfish_osgi_5.1.0/osgi/framework.jar" sourcepath="/home/student/Knopflerfish/knopflerfish_osgi_5.1.0/osgi/framework/src"/>
 	<classpathentry kind="output" path="out"/>
 </classpath>

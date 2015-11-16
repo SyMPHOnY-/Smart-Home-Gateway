@@ -2,7 +2,6 @@ package wmbusmessages;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -133,6 +132,14 @@ public class WmbusPacket implements IWmbus {
 				{
 					this.manufacturer  = weptechTemperatureMeter.getManufacturerString();
 					this.phenomenaList = weptechTemperatureMeter.getPhenomenaList();	
+				}
+			break; 
+			case PIKKERTON_MANUFACTURER_ID:
+				PikkertonMeter pikkertonMeter = new PikkertonMeter(rawbody);
+				if(pikkertonMeter.isValid())
+				{
+					this.manufacturer  = pikkertonMeter.getManufacturerString();
+					this.phenomenaList = pikkertonMeter.getPhenomenaList();	
 				}
 			break; 
 		}

@@ -10,7 +10,7 @@ public interface SQLiteservice {
 	 *
 	 *@param Path to database file
 	 */	
-	void setDatabazeFile(String filePath);
+	/*void setDatabazeFile(String filePath);*/
 	
 	/**
 	 * Store value to database.

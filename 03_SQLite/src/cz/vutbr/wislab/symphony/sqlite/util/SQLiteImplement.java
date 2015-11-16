@@ -1,7 +1,4 @@
 package cz.vutbr.wislab.symphony.sqlite.util;
-
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,20 +13,20 @@ import cz.vutbr.wislab.symphony.sqlite.SQLiteservice;
 
 public class SQLiteImplement implements SQLiteservice {
 	
-	private Connection c = null;
-	private PreparedStatement stmt = null;
-	private static String databaseFile = null;
+	//private static Connection c = null;
+	public PreparedStatement stmt = null;
+	//private static String databaseFile = null;
 	
-	private static final long MINUTE = 60L;
-	private static final long FIVEMINUTE = 300L;
-	private static final long HOUR = 3600L;
-	private static final long DAY = 86400L;
-	private static final long TWODAY = 172800L;
-	private static final long WEEK = 604800L;
-	private static final long TWOWEEK = 1209600L;
-	private static final long MONTH = 2592000L;
-	private static final long YEAR = 31536000L;
-	private static final long TWOYEAR = 63072000L;
+	private static final long MINUTE = 60;
+	private static final long FIVEMINUTE = 300;
+	private static final long HOUR = 3600;
+	private static final long DAY = 86400;
+	private static final long TWODAY = 172800;
+	private static final long WEEK = 604800;
+	private static final long TWOWEEK = 1209600;
+	private static final long MONTH = 2592000;
+	private static final long YEAR = 31536000;
+	private static final long TWOYEAR = 63072000;
 		
 	private Map<String, Long> term = new HashMap<String, Long>();
 	private Map<String, Long> res = new HashMap<String, Long>();
@@ -44,49 +41,35 @@ public class SQLiteImplement implements SQLiteservice {
 		res.put("2D", MINUTE);
 		res.put("1Y", HOUR);
 		res.put("2Y", DAY);
-	}
-	
-	public  void connectToDatabase()
-	{
-		//Connecting to database
+		
 		try {
-			Class.forName("org.sqlite.JDBC");
-			c = DriverManager.getConnection("jdbc:sqlite:" + SQLiteImplement.databaseFile);
-			c.setAutoCommit(false);
-		} 
-		catch (ClassNotFoundException e) {
-			System.out.println("Package with class org.sqlite.JDBC not running!");
-		} 
-		catch (SQLException e)
-		{
-			System.out.println("DriverManager error!");
-		} 
-		catch (Exception e) {
-			System.out.println("shit hapens...");
+			initializeDatabase();
+		} catch (SQLException e) {
+			System.out.println("Can not write to database!");
 			e.printStackTrace();
 		}
 	}
-	
+
 	private void deleteOld(String tableName, String period, String type, String serial, long timeStamp) throws SQLException
 	{
 		//Delete records older then now - period resolution from database
 		String deleteSQL = "DELETE from " + tableName + " where serial='" + serial + "' AND type='" + type +
 							"' AND period='" + period + "' AND timestamp < " + (timeStamp-term.get(period));
-		stmt = c.prepareStatement(deleteSQL);
+		stmt = DBConnection.getDbCon().c.prepareStatement(deleteSQL);
 		stmt.execute();
 	}
 	
 	public void initializeDatabase() throws SQLException
 	{
-		this.connectToDatabase();
 		String table = null;
 		String serial = null;
 		String type = null;
 		long lastTimestamp = 0;
 		//Get all table names
 		String sqlQueryTables = "SELECT * FROM sqlite_master WHERE type='table'";
-		stmt = c.prepareStatement(sqlQueryTables);
+		stmt = DBConnection.getDbCon().c.prepareStatement(sqlQueryTables);
 		ResultSet rsTables = stmt.executeQuery();
+		
 		
 		while(rsTables.next())
 		{
@@ -95,7 +78,7 @@ public class SQLiteImplement implements SQLiteservice {
 			{
 				//Get all types and serial from table
 				String sqlQueryTypes = "SELECT DISTINCT type, serial FROM " + table;
-				stmt = c.prepareStatement(sqlQueryTypes);
+				stmt = DBConnection.getDbCon().c.prepareStatement(sqlQueryTypes);
 				ResultSet rsTypes = stmt.executeQuery();
 				
 				while (rsTypes.next())
@@ -105,16 +88,17 @@ public class SQLiteImplement implements SQLiteservice {
 					
 					for (String period : res.keySet())
 					{
-						long i = 0;
 						lastTimestamp = getLastTimestamp(table, serial, type, period);
 						if (lastTimestamp != 0)
 						{
+							long i = System.currentTimeMillis()/1000 - term.get(period);
+							//delete old values
+							deleteOld(table, period, type, serial, i);
+							
 							//Initialize data - store null value to database when it was switch of
 							for (i = lastTimestamp + res.get(period); i < generateTimeStamp(period); i+=res.get(period)) {
 								storeToDatabase(table, serial, "NULL", type, i, period);
-							}
-							//delete old values
-							deleteOld(table, period, type, serial, i);
+							}						
 						}
 					}
 				}
@@ -124,7 +108,7 @@ public class SQLiteImplement implements SQLiteservice {
 				String sqlQuery = null;
 				sqlQuery = "DELETE FROM " + table;
 				try {
-					stmt = c.prepareStatement(sqlQuery);
+					stmt = DBConnection.getDbCon().c.prepareStatement(sqlQuery);
 					stmt.execute();
 				} catch (SQLException e) {
 					System.out.println("Can not write to database!");
@@ -132,16 +116,17 @@ public class SQLiteImplement implements SQLiteservice {
 				}
 			}
 		}
-		this.closeDatabase();
+		//stmt.close();
+		//this.closeDatabase();
 	}
 	
 	public void closeDatabase()
 	{
 		try {
 			stmt.close();
-			c.commit();
-			c.close();
-			c = null;
+			DBConnection.getDbCon().c.commit();
+			DBConnection.getDbCon().c.close();
+			DBConnection.getDbCon().c = null;
 		} catch (SQLException e) {
 			System.out.println("Can not close database!");
 			e.printStackTrace();
@@ -231,24 +216,25 @@ public class SQLiteImplement implements SQLiteservice {
 		return 0;
 	}
 	
-	private void storeToDatabase(String tableName, String serial, String value, String type, long timeStamp, String period) throws SQLException
+	private synchronized void storeToDatabase(String tableName, String serial, String value, String type, long timeStamp, String period) throws SQLException
 	{
 		//store prepared values to database
 		String sqlString = "INSERT INTO " + tableName + " (serial, timestamp, period, value, type) VALUES(?,?,?,?,?)";
-		stmt = c.prepareStatement(sqlString);
+		stmt = DBConnection.getDbCon().c.prepareStatement(sqlString);
 		stmt.setString(1, serial);
 		stmt.setLong(2, timeStamp);
 		stmt.setString(3, period);
 		stmt.setString(4, value);
 		stmt.setString(5, type);
-		stmt.execute();
+		stmt.executeUpdate();
+		//stmt.close();
 	}
 	
 	private long getLastTimestamp(String tableName, String serial, String type, String period) throws SQLException
 	{
 		//return last time stamp
 		String sqlStringTimes = "SELECT * FROM " + tableName + " WHERE period='"+period+"' AND type='"+type+"' ORDER BY timestamp  DESC LIMIT 1";
-		stmt = c.prepareStatement(sqlStringTimes);
+		stmt = DBConnection.getDbCon().c.prepareStatement(sqlStringTimes);
 		ResultSet rsTimes = stmt.executeQuery();
 		long timeStamp = 0;
 		while (rsTimes.next()) {
@@ -259,10 +245,10 @@ public class SQLiteImplement implements SQLiteservice {
 	
 	private String getStoredValue(String sqlQuery)
 	{
-		this.connectToDatabase();
+		//this.connectToDatabase();
 		String value = "NULL";
 		try {
-			stmt = c.prepareStatement(sqlQuery);
+			stmt = DBConnection.getDbCon().c.prepareStatement(sqlQuery);
 			ResultSet rsVal = stmt.executeQuery();
 			if(rsVal.next()){
 				value = rsVal.getString("value");
@@ -270,29 +256,30 @@ public class SQLiteImplement implements SQLiteservice {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		this.closeDatabase();
+		//this.closeDatabase();
 		return value;
 	}
 	
-	private void setActualValue(String serial, String type, String value)
+	private synchronized void setActualValue(String serial, String type, String value)
 	{
-		this.connectToDatabase();
+		//this.connectToDatabase();
 		String sqlQuery = null;
 		sqlQuery = "DELETE FROM actual_values WHERE serial='" + serial + "' AND type='" + type + "'";
 		try {
-			stmt = c.prepareStatement(sqlQuery);
+			stmt = DBConnection.getDbCon().c.prepareStatement(sqlQuery);
 			stmt.execute();
 			sqlQuery = "INSERT INTO actual_values(serial, value, type) VALUES(?,?,?)";
-			stmt = c.prepareStatement(sqlQuery);
+			stmt = DBConnection.getDbCon().c.prepareStatement(sqlQuery);
 			stmt.setString(1, serial);
 			stmt.setString(2, value);
 			stmt.setString(3, type);
-			stmt.execute();
+			stmt.executeUpdate();
+			//stmt.close();
 		} catch (SQLException e) {
 			System.out.println("Can not write to database!");
 			e.printStackTrace();
 		}
-		this.closeDatabase();
+		//this.closeDatabase();
 	}
 	
 	private static Double getDateDiff(Long date1, Long date2) {
@@ -304,11 +291,11 @@ public class SQLiteImplement implements SQLiteservice {
 	
 	private TreeMap<Long, String> getStoredDataWONull(String tableName, String serial, String period, String type) {
 		TreeMap<Long, String> data = new TreeMap<Long, String>();
-		this.connectToDatabase();
+		//this.connectToDatabase();
 		String sqlQuery = null;
 		sqlQuery = "SELECT * " + getQueryPart(tableName, serial, period, type) + " AND value !='NULL'";
 		try {
-			stmt = c.prepareStatement(sqlQuery);
+			stmt = DBConnection.getDbCon().c.prepareStatement(sqlQuery);
 			ResultSet rsData = stmt.executeQuery();
 			while (rsData.next())
 			{
@@ -317,18 +304,18 @@ public class SQLiteImplement implements SQLiteservice {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		this.closeDatabase();
+		//this.closeDatabase();
 		return data;
 	}
 	
 	@Override
 	public Map<Long, String> getStoredData(String tableName, String serial, String period, String type) {
 		Map<Long, String> data = new TreeMap<Long, String>();
-		this.connectToDatabase();
+		//this.connectToDatabase();
 		String sqlQuery = null;
 		sqlQuery = "SELECT * " + getQueryPart(tableName, serial, period, type);
 		try {
-			stmt = c.prepareStatement(sqlQuery);
+			stmt = DBConnection.getDbCon().c.prepareStatement(sqlQuery);
 			ResultSet rsData = stmt.executeQuery();
 			while (rsData.next())
 			{
@@ -337,17 +324,16 @@ public class SQLiteImplement implements SQLiteservice {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		this.closeDatabase();
+		//this.closeDatabase();
 		return data;
 	}
 
 	@Override
 	public void storeData(String tableName, String serial, String value, String type) {
 		long currentTime = Calendar.getInstance().getTimeInMillis()/1000; 
-		
 		try {
 			setActualValue(serial, type, value);
-			this.connectToDatabase();
+			//this.connectToDatabase();
 			for (String period : res.keySet()) {
 				long lastTimestamp = this.getLastTimestamp(tableName, serial, type, period);
 				long timeStamp = 0;
@@ -381,7 +367,7 @@ public class SQLiteImplement implements SQLiteservice {
 			System.out.println("Can not write to database.");
 			e.printStackTrace();
 		}
-		this.closeDatabase();
+		//this.closeDatabase();
 		
 	}
 
@@ -404,17 +390,6 @@ public class SQLiteImplement implements SQLiteservice {
 		String sqlQuery = null;
 		sqlQuery = "SELECT AVG(value) AS value " + getQueryPart(tableName, serial, period, type)+ " AND value !='NULL'";
 		return getStoredValue(sqlQuery);
-	}
-
-	@Override
-	public void setDatabazeFile(String filePath) {
-		SQLiteImplement.databaseFile = filePath;
-		try {
-			initializeDatabase();
-		} catch (SQLException e) {
-			System.out.println("Can not write to database!");
-			e.printStackTrace();
-		}
 	}
 
 	@Override
@@ -463,40 +438,42 @@ public class SQLiteImplement implements SQLiteservice {
 	}
 
 	@Override
-	public void addUPNPDevice(String uid, String options) {
+	public synchronized void addUPNPDevice(String uid, String options) {
 		String sqlQuery = null;
 		sqlQuery = "INSERT INTO upnp_devices(uid, value) VALUES(?,?)";
-		this.connectToDatabase();
+		//this.connectToDatabase();
 		try {
-			stmt = c.prepareStatement(sqlQuery);
+			stmt = DBConnection.getDbCon().c.prepareStatement(sqlQuery);
 			stmt.setString(1, uid);
 			stmt.setString(2, options);
-			stmt.execute();
+			stmt.executeUpdate();
+			//stmt.close();
 			
 		} catch (SQLException e) {
 			System.out.println("Can not write to database!");
 			e.printStackTrace();
 		}
-		this.closeDatabase();
+		//this.closeDatabase();
 	}
 
 	@Override
-	public void addUPNPDevices(Map<String, String> devices) {
+	public synchronized void addUPNPDevices(Map<String, String> devices) {
 		String sqlQuery = null;
 		sqlQuery = "INSERT INTO upnp_devices(uid, value) VALUES(?,?)";
-		this.connectToDatabase();
+		//this.connectToDatabase();
 		try {
 			for (Map.Entry<String, String> entry : devices.entrySet()) {
-				stmt = c.prepareStatement(sqlQuery);
+				stmt = DBConnection.getDbCon().c.prepareStatement(sqlQuery);
 				stmt.setString(1, entry.getKey());
 				stmt.setString(2, entry.getValue());
-				stmt.execute();
+				stmt.executeUpdate();
+				//stmt.close();
 			}	
 		} catch (SQLException e) {
 			System.out.println("Can not write to database!");
 			e.printStackTrace();
 		}
-		this.closeDatabase();
+		//this.closeDatabase();
 	}
 
 	@Override
@@ -504,17 +481,18 @@ public class SQLiteImplement implements SQLiteservice {
 		String sqlQuery = null;
 		Map<String, String> devices = new HashMap<String, String>();
 		sqlQuery = "SELECT * FROM upnp_devices";
-		this.connectToDatabase();
+		//this.connectToDatabase();
 		try {
-			stmt = c.prepareStatement(sqlQuery);
+			stmt = DBConnection.getDbCon().c.prepareStatement(sqlQuery);
 			ResultSet rsVal = stmt.executeQuery();
 			while(rsVal.next()){
 				devices.put(rsVal.getString("uid"), rsVal.getString("value"));
 			}
+			//stmt.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		this.closeDatabase();
+		//this.closeDatabase();
 		return devices;
 	}
 

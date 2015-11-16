@@ -6,6 +6,8 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.Iterator;
 
 import javax.imageio.IIOImage;
@@ -18,6 +20,8 @@ public class Manager implements SlideGenerator {
 	private String inputFolder = "//tiny/DLNA/Elementy/";
 	private String outputFolder = "//tiny/DLNA/";
 	private String date;
+	
+	private DecimalFormat df;
 
 	private BufferedImage slide1 = null;
 	private BufferedImage slide2 = null;
@@ -27,6 +31,8 @@ public class Manager implements SlideGenerator {
 
 	public Manager() {
 		// TODO Auto-generated constructor stub
+		df = new DecimalFormat("#.###");
+		df.setRoundingMode(RoundingMode.CEILING);
 	}
 
 	@Override
@@ -109,9 +115,9 @@ public class Manager implements SlideGenerator {
 		}
 
 		// electricity balance
-		setText(1265, 445, electricity + " kWh", slide1, new Font("Arial",
+		setText(1265, 445, df.format(electricity) + " kWh", slide1, new Font("Arial",
 				Font.PLAIN, 50), Color.red);
-		setText(1265, 508, "\u20AC" + electrityBalanceEur, slide1, new Font(
+		setText(1265, 508, "\u20AC" + df.format(electrityBalanceEur), slide1, new Font(
 				"Arial", Font.BOLD, 50), Color.red);
 
 		// alarm system
@@ -258,22 +264,29 @@ public class Manager implements SlideGenerator {
 				new Color(70, 72, 73));
 		// set consumption
 		setRectangle(745, 425, 750, 110, new Color(33, 33, 33), slide3);
-		setText(765, 500, consumption + " kWh", slide3, new Font("Arial",
+		setText(765, 500, df.format(consumption) + " kWh", slide3, new Font("Arial",
 				Font.PLAIN, 50), Color.white);
 
+		// set difference
+		/*setRectangle(745 + (int) (Math.round(750 * production) / consumption),
+					535, (int) (Math.round(750 * difference) / consumption), 110,
+					new Color(232, 23, 22), slide3);*/
+		setRectangle(745, 535, 750, 110, new Color(232, 23, 22), slide3);
+		setText(765 + (int) (Math.round(750 * production) / consumption), 610,
+				df.format(difference) + " kWh", slide3, new Font("Arial", Font.PLAIN, 50),
+				Color.white);
+		
 		// set production
 		setRectangle(745, 535,
 				(int) (Math.round(750 * production) / consumption), 110,
 				new Color(117, 170, 0), slide3);
-		setText(765, 610, production + " kWh", slide3, new Font("Arial",
+		if (production > 0.28 * consumption)
+		{
+		setText(765, 610, df.format(production) + " kWh", slide3, new Font("Arial",
 				Font.PLAIN, 50), Color.white);
-		// set difference
-		setRectangle(745 + (int) (Math.round(750 * production) / consumption),
-				535, (int) (Math.round(750 * difference) / consumption), 110,
-				new Color(232, 23, 22), slide3);
-		setText(765 + (int) (Math.round(750 * production) / consumption), 610,
-				difference + " kWh", slide3, new Font("Arial", Font.PLAIN, 50),
-				Color.white);
+		}
+		
+		
 
 		saveImage(slide3, this.outputFolder + "3.jpg");
 
@@ -304,8 +317,8 @@ public class Manager implements SlideGenerator {
 		// gray rectangle
 
 		// setRectangle(905, 263, 193, 570, new Color(30, 108, 187), slide4);
-		setRectangle(905, 833 - (570 * waterToday) / 1500, 193,
-				(570 * waterToday) / 1500, new Color(30, 108, 187), slide4);
+		setRectangle(905, 833 - (570 * waterToday) / /*1500*/10000, 193,
+				(570 * waterToday) / /*1500*/10000, new Color(30, 108, 187), slide4);
 		setText(930, 800, Integer.toString(waterToday) + " L", slide4,
 				new Font("Arial", Font.PLAIN, 50), Color.white);
 
@@ -314,8 +327,8 @@ public class Manager implements SlideGenerator {
 		// gray rectangle
 
 		// setRectangle(905, 263, 193, 570, new Color(30, 108, 187), slide4);
-		setRectangle(1106, 833 - (570 * waterYesterday) / 1500, 193,
-				(570 * waterYesterday) / 1500, new Color(100, 100, 100), slide4);
+		setRectangle(1106, 833 - (570 * waterYesterday) / /*1500*/10000, 193,
+				(570 * waterYesterday) / /*1500*/10000, new Color(100, 100, 100), slide4);
 		setText(1131, 800, Integer.toString(waterYesterday) + " L", slide4,
 				new Font("Arial", Font.PLAIN, 50), Color.white);
 
@@ -325,9 +338,9 @@ public class Manager implements SlideGenerator {
 		// gray rectangle
 
 		// setRectangle(905, 263, 193, 570, new Color(30, 108, 187), slide4);
-		setRectangle(905, 833 - (570 * waterAverageSevenDays) / 1500, 193, 5,
+		setRectangle(905, 833 - (570 * waterAverageSevenDays) / /*1500*/10000, 193, 5,
 				new Color(239, 78, 35), slide4);
-		setRectangle(1106, 833 - (570 * waterAverageSevenDays) / 1500, 193, 5,
+		setRectangle(1106, 833 - (570 * waterAverageSevenDays) / /*1500*/10000, 193, 5,
 				new Color(239, 78, 35), slide4);
 
 		saveImage(slide4, this.outputFolder + "4.jpg");

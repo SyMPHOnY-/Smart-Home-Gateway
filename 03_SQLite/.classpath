@@ -9,6 +9,6 @@
 		</accessrules>
 	</classpathentry>
 	<classpathentry kind="lib" path="/home/student/Knopflerfish/knopflerfish_osgi_5.1.0/osgi/framework.jar" sourcepath="/home/student/Knopflerfish/knopflerfish_osgi_5.1.0/osgi/framework/src"/>
-	<classpathentry kind="lib" path="/home/student/Desktop/SQLite/sqlite-jdbc-3.8.10.1.jar"/>
+	<classpathentry kind="lib" path="/home/student/Desktop/Symphony_Full/04_SQLiteDriver/sqlite-jdbc-3.8.10.1.jar"/>
 	<classpathentry kind="output" path="out"/>
 </classpath>

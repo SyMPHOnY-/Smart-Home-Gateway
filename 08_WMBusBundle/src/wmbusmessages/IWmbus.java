@@ -20,12 +20,14 @@ public interface IWmbus {
 	 */
 	public static final int BONEGA_MANUFACTURER_ID  = 0x09EE;
 	public static final int WEPTECH_MANUFACTURER_ID = 0x5CB0;
+	public static final int PIKKERTON_MANUFACTURER_ID = 0x412B;
 	
 	/*
 	 * WMBUS Manufacturers Strings
 	 */
 	public static final String BONEGA_MANUFACTURER_STRING   = "BONEGA";
 	public static final String WEPTECH_MANUFACTURER_STRING  = "WEPTECH";
+	public static final String PIKKERTON_MANUFACTURER_STRING  = "PIKKERTON";
 	
 	/*
 	 * WMBUS Message Lens

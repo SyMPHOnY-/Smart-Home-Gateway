@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-Version: 1.0.0
+Bundle-Name: WebPlay
+Bundle-ManifestVersion: 2
+Bundle-Activator: WebPlay.Activator
+Import-Package: org.osgi.framework, javax.servlet, javax.servlet.http,
+  org.osgi.service.http, org.osgi.util.tracker, org.osgi.service.event
+Bundle-SymbolicName: WebPlay
+

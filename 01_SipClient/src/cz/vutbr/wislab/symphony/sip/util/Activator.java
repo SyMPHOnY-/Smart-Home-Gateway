@@ -45,7 +45,6 @@ public class Activator implements BundleActivator {
 		//Events listener registration
 		ServiceReference<EventAdmin> ref = context.getServiceReference(EventAdmin.class);
 		admin = context.getService(ref);
-
 	}
 
 	/*
