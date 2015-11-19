@@ -8,10 +8,10 @@
 			<accessrule kind="nonaccessible" pattern="**/*"/>
 		</accessrules>
 	</classpathentry>
-	<classpathentry kind="lib" path="/home/student/workspace/json-simple/json-simple-1.1.1.jar"/>
+	<classpathentry kind="lib" path="/home/student/Desktop/Symphony_Full/02_JSONSimple/json-simple-1.1.1.jar"/>
 	<classpathentry kind="lib" path="/home/student/Knopflerfish/knopflerfish_osgi_5.1.0/osgi/jars/event/event_all-4.0.1.jar"/>
 	<classpathentry kind="lib" path="/home/student/Knopflerfish/knopflerfish_osgi_5.1.0/osgi/jars/log/log_all-5.0.0.jar"/>
-	<classpathentry kind="lib" path="/home/student/workspace/UpnpDiscoveryBundle/refLib/cling-core-2.0.1.jar"/>
+	<classpathentry kind="lib" path="/home/student/Desktop/Symphony_Full/06_DLNAPushBundle/refLib/cling-core-2.0.1.jar"/>
 	<classpathentry kind="con" path="org.knopflerfish.eclipse.core.BUNDLE_CONTAINER/SQLite">
 		<accessrules>
 			<accessrule kind="accessible" pattern="cz/vutbr/wislab/symphony/sqlite/"/>
@@ -42,5 +42,6 @@
 			<accessrule kind="nonaccessible" pattern="**/*"/>
 		</accessrules>
 	</classpathentry>
+	<classpathentry kind="lib" path="/home/student/Knopflerfish/knopflerfish_osgi_5.1.0/osgi/framework.jar" sourcepath="/home/student/Knopflerfish/knopflerfish_osgi_5.1.0/osgi/framework/src"/>
 	<classpathentry kind="output" path="out"/>
 </classpath>

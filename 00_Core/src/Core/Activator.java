@@ -34,10 +34,10 @@ public class Activator implements BundleActivator {
 		//startBundles(bc.getBundles());
 		
 		//start miniDLNA Server on NEC
-		//inicialization.startMiniDLNA("minidlna -f /tiny/minidlna.conf");
+		inicialization.startMiniDLNA("minidlna -f /tiny/minidlna.conf");
 		
 		//set NTP pool for NTP Client on NEC
-		//inicialization.setDate("0.openwrt.pool.ntp.org");
+		inicialization.setDate("0.openwrt.pool.ntp.org");
 			
 		System.out.println("{Core Bundle}:Registering events...");
 		EventHandler eventHandler = new CoreEventHandler(context);

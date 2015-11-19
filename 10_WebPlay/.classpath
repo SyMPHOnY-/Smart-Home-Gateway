@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry excluding="**/.svn/**|**/CVS/**" including="**/*.java" kind="src" path="src"/>
+	<classpathentry kind="con" path="org.knopflerfish.eclipse.core.EXECUTION_ENVIRONMENT_CONTAINER"/>
+	<classpathentry kind="con" path="org.knopflerfish.eclipse.core.FRAMEWORK_CONTAINER">
+		<accessrules>
+			<accessrule kind="accessible" pattern="org/osgi/framework/"/>
+			<accessrule kind="nonaccessible" pattern="**/*"/>
+		</accessrules>
+	</classpathentry>
+	<classpathentry kind="lib" path="/home/student/Knopflerfish/knopflerfish_osgi_5.1.0/osgi/framework.jar" sourcepath="/home/student/Knopflerfish/knopflerfish_osgi_5.1.0/osgi/framework/src"/>
+	<classpathentry kind="lib" path="/home/student/Knopflerfish/knopflerfish_osgi_5.1.0/osgi/jars/http/http_all-4.0.5.jar"/>
+	<classpathentry kind="lib" path="/home/student/Desktop/Jetty/javax.servlet-api-3.1.0.jar"/>
+	<classpathentry kind="lib" path="/home/student/Knopflerfish/knopflerfish_osgi_5.1.0/osgi/jars/event/event_all-4.0.1.jar"/>
+	<classpathentry kind="output" path="out"/>
+</classpath>

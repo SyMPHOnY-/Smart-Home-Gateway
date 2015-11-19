@@ -17,14 +17,16 @@ public class Activator implements BundleActivator{
 		System.out.println("SQLite service running");
 		SQLiteservice sqlite = new SQLiteImplement();
 		
-		//sqlite.setDatabazeFile("/home/student/Desktop/SQlite/symphony");  
-		//sqlite.setDatabazeFile("/tiny/symphony");
+		
 		Activator.bc.registerService(SQLiteservice.class, sqlite, null);
+		
+		//sqlite.storeData("electricity_prod", "1234", "480", "Prod");
 	}
 
 	@Override
 	public void stop(BundleContext context) throws Exception {
 		Activator.bc.ungetService(Activator.bc.getServiceReference(SQLiteservice.class.getName()));
+		DBConnection.closeDB();
 		Activator.bc = null;
 		System.out.println("SQLite service stopped");
 	}

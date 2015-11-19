@@ -21,5 +21,6 @@
 	<classpathentry kind="lib" path="refLib/seamless-util-1.1.0.jar"/>
 	<classpathentry kind="lib" path="refLib/seamless-xml-1.1.0.jar"/>
 	<classpathentry kind="lib" path="refLib/xercesImpl-2.8.0.jar"/>
+	<classpathentry kind="lib" path="/home/student/Knopflerfish/knopflerfish_osgi_5.1.0/osgi/framework.jar" sourcepath="/home/student/Knopflerfish/knopflerfish_osgi_5.1.0/osgi/framework/src"/>
 	<classpathentry kind="output" path="out"/>
 </classpath>

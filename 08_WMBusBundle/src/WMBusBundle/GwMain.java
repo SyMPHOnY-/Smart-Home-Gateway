@@ -26,6 +26,9 @@ public final class GwMain implements Runnable {
 			properties.put("TEMP", gwPacket.getPhenomenaList().get(0));
 			properties.put("HUM", gwPacket.getPhenomenaList().get(1));
 		}	
+		if (gwPacket.getManufacturer().equals("PIKKERTON")) {
+			properties.put("WORK", gwPacket.getPhenomenaList().get(0));
+		}		
 		if (gwPacket.getManufacturer().equals("BONEGA")) {
 			properties.put("TYPE", gwPacket.getPhenomenaList().get(0));
 			properties.put("VALUE", gwPacket.getPhenomenaList().get(1));

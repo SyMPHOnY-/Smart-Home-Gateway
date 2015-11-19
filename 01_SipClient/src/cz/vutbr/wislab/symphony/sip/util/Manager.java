@@ -4,7 +4,7 @@ import cz.vutbr.wislab.symphony.sip.client.NotInitializedException;
 import cz.vutbr.wislab.symphony.sip.client.SipManager;
 
 
-public class Manager implements SipInterface {
+public class Manager implements SipInterface{
 	
 		
 	@Override
