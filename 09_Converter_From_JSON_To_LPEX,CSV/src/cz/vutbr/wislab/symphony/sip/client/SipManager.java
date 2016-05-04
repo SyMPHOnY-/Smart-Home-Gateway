@@ -7,9 +7,11 @@ import gov.nist.javax.sip.message.SIPMessage;
 
 
 import java.io.UnsupportedEncodingException;
+import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-
+import java.util.Calendar;
 import java.util.Properties;
 import java.util.Timer;
 
@@ -174,12 +176,12 @@ public class SipManager implements SipListener, SipManagerInterface {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
 		}
-		// Instantiate Timer Object
+		/*// Instantiate Timer Object
 		Timer time = new Timer(); 
 		// Instantiate SheduledTask class
 		ScheduleTask st = new ScheduleTask(); 
 		// Create Repetitively task for every 15 min
-		time.schedule(st, 0, 900000); 
+		time.schedule(st, (getTimeOfFirstSchedule()*1000)+1, 900000); */
 	}
 
 	public Address createContactAddress() {
@@ -310,11 +312,15 @@ public class SipManager implements SipListener, SipManagerInterface {
 				String message = sp.getMessageContent();
 				System.out.println("MESSAGE TO RECOMPOSE: " + message);
 				//System.out.println(sp);
-				if (!message.contains("<isComposing xmlns='urn:ietf:params:xml:ns:im-iscomposing'\n")) {
+				if (!message.contains("<isComposing xmlns='urn:ietf:params:xml:ns:im-iscomposing'\n") && message.contains("Consumption last 15 minutes")) {
+					System.out.println("Inside if");
+					if(message.contains("<")){ 
 					message = crop(message);
+					}
 					System.out.println(message);
 					JsonConverter jsonConv = new JsonConverter();
 					jsonConv.recomposeAndSave(message);
+					jsonConv.sendToSFTP();
 				}
 				
 				
@@ -524,4 +530,56 @@ public class SipManager implements SipListener, SipManagerInterface {
 			return message;
 		}
 		
+		// ----------------------------------------------//
+		// Method for getting the first time of schedule //
+		//-----------------------------------------------//
+		
+		
+		/*TODO
+		 * Reimplement using crone
+		 */
+		public int getTimeOfFirstSchedule(){
+			
+			DateFormat dateFormat = new SimpleDateFormat("mm:ss");
+			Calendar cal = Calendar.getInstance();
+			String time = dateFormat.format(cal.getTime());
+			String timeSep[] = time.split(":");
+			int min = Integer.parseInt(timeSep[0]);
+			int sec = Integer.parseInt(timeSep[1]);
+			System.out.println("Mins: " + min + " Secs: " + sec);
+			if (min >= 0 && min < 15){
+				min = 15 - min;
+				if (sec > 0){
+					min = min -1;
+					sec = 60-sec;
+					return (min * 60) + sec;
+				}return min*60;	
+			}else if (min >= 15 && min < 30){
+				min = 30 - min;
+				if (sec > 0){
+					min = min -1;
+					sec = 60-sec;
+					return (min * 60) + sec;
+				}return min*60;
+				
+			}else if (min >= 30 && min < 45){
+				min = 45 - min;
+				if (sec > 0){
+					min = min -1;
+					sec = 60-sec;
+					return (min * 60) + sec;
+				}return min*60;	
+				
+			}else if (min >= 45 && min < 60){
+				min = 60 - min;
+				if (sec > 0){
+					min = min -1;
+					sec = 60-sec;
+					return (min * 60) + sec;
+				}return min*60;	
+				
+			}
+				
+			return -1;
+		}		
 }

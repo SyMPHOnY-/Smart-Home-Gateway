@@ -3,8 +3,13 @@ package cz.vutbr.wislab.symphony.converter;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -29,11 +34,11 @@ public class JsonConverter {
 	// Hostname, username and password are hardcoded into this method      //
 	//---------------------------------------------------------------------//
 	public  void sendToSFTP () {
-        String SFTPHOST = "HOSTNAME";
+        String SFTPHOST = "sftp.energieburgenland.at";
         int SFTPPORT = 22;
-        String SFTPUSER = "USERNAME";
-        String SFTPPASS = "PASSWORD";
-        String SFTPWORKINGDIR = "WORKINGFOLDER";
+        String SFTPUSER = "ftpkunde";
+        String SFTPPASS = "tramsrotinom00#";
+        //String SFTPWORKINGDIR = "MeterData";
 
         Session session = null;
         Channel channel = null;
@@ -53,7 +58,7 @@ public class JsonConverter {
             channel.connect();
             System.out.println("sftp channel opened and connected.");
             channelSftp = (ChannelSftp) channel;
-            channelSftp.cd(SFTPWORKINGDIR);
+            //channelSftp.cd(SFTPWORKINGDIR);
             File folder = new File(".");
     		File[] listOfFiles = folder.listFiles();
     		    for (int i = 0; i < listOfFiles.length; i++) {
@@ -61,7 +66,7 @@ public class JsonConverter {
     		    	  channelSftp.put(new FileInputStream(listOfFiles[i]), listOfFiles[i].getName());
     		          System.out.println("File: " + listOfFiles[i].getName() + " sent.");
     		      }
-    		      else if(listOfFiles[i].getName().contains(".lpex")) {
+    		      else if(listOfFiles[i].getName().contains(".txt")) {
     		    	  channelSftp.put(new FileInputStream(listOfFiles[i]), listOfFiles[i].getName());
     		          System.out.println("File: " + listOfFiles[i].getName() + " sent.");
     		      }
@@ -105,9 +110,10 @@ public class JsonConverter {
 	}
 	
 	//---------------------------------------------------------------------//
-	// Method for writing given String to a given File					   //
+	// Method for writing given String to a given File                     //
+	// with default encoding					                           //
 	//---------------------------------------------------------------------//
-	public void writeToFile(String fileName, String toWrite){
+	public void writeToFileDefault(String fileName, String toWrite){
         try {
             // Assume default encoding.
             FileWriter fileWriter =
@@ -127,6 +133,33 @@ public class JsonConverter {
 
         }
 	}
+	
+	//---------------------------------------------------------------------//
+	// Method for writing given String to a given File                     //
+	// with UTF-8 encoding					                               //
+	//---------------------------------------------------------------------//
+	public void writeToFileUTF8(String fileName, String toWrite){
+		Writer out;
+		try {
+			out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileName), "UTF-8"));
+			try {
+				out.write(toWrite);
+				out.close();
+			} catch (IOException e) {
+				System.out.println(
+		                "Error writing to file '"
+		                + fileName + "'");
+			}
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+		
+		
 	//---------------------------------------------------------------------//
 	// Method for finding and deleting device id according to the          //
 	// given string														   //
@@ -157,18 +190,20 @@ public class JsonConverter {
 			String[] repair = wrong.split("-");
 			String[] readyTimeAndDate = new String[4];
 			readyTimeAndDate[0] = (repair[2] + "." + repair[1] + "." + repair[0]); 
-			readyTimeAndDate[1] = (repair[2] + "-" + repair[1] + "-" + repair[0]); 
+			readyTimeAndDate[1] = (repair[0] + "-" + repair[1] + "-" + repair[2]); 
 			wrong = rightTimeAndDate[1];
 			repair = wrong.split(":");
 			readyTimeAndDate[2] = rightTimeAndDate[1];
 			readyTimeAndDate[3] = (repair[0] + "." + repair[1] + "." + repair[2]);
-
+			/*System.out.println(readyTimeAndDate[0]);
+			System.out.println(readyTimeAndDate[1]);
+			System.out.println(readyTimeAndDate[2]);
+			System.out.println(readyTimeAndDate[3]);*/
 			
 			return readyTimeAndDate;
 		}
 		
-	
-	
+
 	
 		//---------------------------------------------------------------------//
 		// Method for converting parsed JSON to CSV and LPEX				   //
@@ -178,7 +213,7 @@ public class JsonConverter {
 			// ----------------------------------------------//
 			// COMMON FOR ALL								 //
 			//-----------------------------------------------//
-			String deviceId = "AT0090000000000000000000000016971";
+			String deviceId = "EB0000000000000000000000000000001";
 			String currentUnit[] = new String[10];
 			String currentValue[] = new String[10];
 			String systemObisCode[] = new String[10];
@@ -200,11 +235,11 @@ public class JsonConverter {
 			String kALINr = "";
 			String line = "";
 			String uniqueLINr = "";
-			String zPB = "AT0090000000000000000000000025029";
+			//String zPB = "AT0090000000000000000000000025029";
 			//String classificationNumber = "1-1:1.9.1 P01";
-			String transformerFactor = "";
+			String transformerFactor = "1";
 			String mPduration = "15";
-			String noName = "2000";
+			String noName = "00000";
 			String lpexText;
 			
 			
@@ -215,57 +250,53 @@ public class JsonConverter {
 			//String channel = "1-1:1.8.0";
 			String timestamp;
 			String csvText;
-			
-			currentDateDash = getTimeAndDate(outputData.get("value").get(outputData.get("name").indexOf("CurrentTime")))[1];
-			currentDateDot = getTimeAndDate(outputData.get("value").get(outputData.get("name").indexOf("CurrentTime")))[0];
-			currentTimeColon = getTimeAndDate(outputData.get("value").get(outputData.get("name").indexOf("CurrentTime")))[2];
-			currentTimeDot = getTimeAndDate(outputData.get("value").get(outputData.get("name").indexOf("CurrentTime")))[3];
+			String readingType = "METER_READING";
+			System.out.println(outputData.get("value"));
+			System.out.println(outputData.get("name").indexOf("Current Time"));
+			currentDateDash = getTimeAndDate(outputData.get("value").get(outputData.get("name").indexOf("Current Time")))[1];
+			currentDateDot = getTimeAndDate(outputData.get("value").get(outputData.get("name").indexOf("Current Time")))[0];
+			currentTimeColon = getTimeAndDate(outputData.get("value").get(outputData.get("name").indexOf("Current Time")))[2];
+			currentTimeDot = getTimeAndDate(outputData.get("value").get(outputData.get("name").indexOf("Current Time")))[3];
 			timestamp = currentTimeDot + "-" + currentDateDot;
-			deviceId = outputData.get("value").get(outputData.get("name").indexOf("MeteringPointID"));
+			//deviceId = outputData.get("value").get(outputData.get("name").indexOf("Metering Point ID"));
 			
-			int obisI = outputData.get("objectCode").size();
+			int obisI = outputData.get("systemCode").size();
 			for (int i = 0; i < obisI; i++) {
-				systemObisCode[i] = (outputData.get("objectCode").get(i));
+				systemObisCode[i] = (outputData.get("systemCode").get(i));
 			}
 			
-			int positionInValue = (outputData.get("value").size())-(outputData.get("units").size());
+			//int positionInValue = (outputData.get("value").size())-(outputData.get("units").size());
+			int positionInValue = outputData.get("name").indexOf("Consumption last 15 minutes");
 			int j = outputData.get("units").size();
 			for (int i = 0; i < j; i++) {
 				currentUnit[i] = (outputData.get("units").get(i));
 				currentValue[i] = (outputData.get("value")).get(positionInValue + i);
 			}
 
-				int positionInObjectCode = (outputData.get("objectCode").size())-(outputData.get("units").size()+1);
+				int positionInObjectCode = (outputData.get("systemCode").size())-(outputData.get("units").size());
 				int dataLength = outputData.get("units").size();
 				//LPEX
 				lpexMsg = "";
-				lpexText = "LPEX V2.0 \nDatum;Zeit;Kundennummer;Kundenname;eindeutigeKDNr;GEId;GEKANr;KALINr;Linie;eindeutigeLINr;ZPB;Kennzahl";
+				lpexText = "LPEX V2.0 \r\nDatum;Zeit;Kundennummer;Kundenname;eindeutigeKDNr;GEId;GEKANr;KALINr;Linie;eindeutigeLINr;ZPB;Kennzahl;Einheit;Wandlerfaktor;MPDauer;Werte; ";
 				for (int i = 0; i < dataLength; i++) {
-					lpexText = lpexText.concat(";Einheit;Wandlerfaktor;MPDauer;Werte; "); 
+					lpexText = lpexText.concat("\r\n" + currentDateDot + ";" + currentTimeColon + ";" + customerNumber + ";" + customerName + ";" + uniqueKDNr + ";" + gEid + ";" + gEKANr + ";" + kALINr + ";" + line + ";" + uniqueLINr + ";" + deviceId + ";" + "1-0:1.29.0"/*systemObisCode[positionInObjectCode + i]*/ + ";" + currentUnit[i] + ";" + transformerFactor + ";" + mPduration + ";" + currentValue[i] + ";" + noName);
 				}
-					lpexText = lpexText.concat("\n" + currentDateDot + ";" + currentTimeColon + ";" + customerNumber + ";" + customerName + ";" + uniqueKDNr + ";" + gEid + ";" + gEKANr + ";" + kALINr + ";" + line + ";" + uniqueLINr + ";" + zPB);
-				for (int i = 0; i < dataLength; i++) {
-					lpexText = lpexText.concat(";" + systemObisCode[positionInObjectCode + i] + ";" + currentUnit[i] + ";" + transformerFactor + ";" + mPduration + ";" + currentValue[i] + ";" + noName); 
-				}
-				lpexMsg = lpexText;
+				lpexMsg = lpexMsg.concat(lpexText);
 				System.out.println("LpexMsg: " + lpexMsg);
 				
 				//CSV
-				csvText = "MeteringPointId;";
+				csvText = "MeteringPointId;Channel;Unit;Value;Timestamp;ReadingType";
 				for (int i = 0; i < dataLength; i++) {
-					csvText = csvText.concat("Channel;Unit;Value;"); 
+					csvText = csvText.concat("\r\n" + deviceId + ";" + "1-0:1.29.0"/*systemObisCode[positionInObjectCode + i]*/ + ";" + currentUnit[i] + ";" + currentValue[i] + ";" + currentDateDash + " " + currentTimeColon + ";" + readingType);
 				}
-				csvText = csvText.concat("Timestamp \n" + deviceId + ";");
-				for (int i = 0; i < dataLength; i++) {
-					csvText = csvText.concat(systemObisCode[positionInObjectCode + i] + ";" + currentUnit[i] + ";" + currentValue[i] + ";");
-				}
-				csvMsg = csvText.concat(currentDateDash + " " + currentTimeColon);		
+				csvMsg = csvText;		
 			
 				System.out.println("ValuePosition: " + positionInValue + " ,PositionInObjectCode: " + positionInObjectCode);
 				System.out.println("CSV MESSAGE:" + csvMsg);
 				findAndDeleteByDeviceID(deviceId);
-				writeToFile(deviceId + "_" + timestamp + ".csv", csvMsg);
-				writeToFile(deviceId + "_" + timestamp + ".lpex", lpexMsg);
-				
+				writeToFileUTF8(deviceId + "_" + timestamp + ".csv", csvMsg);
+				writeToFileUTF8(deviceId + "_" + timestamp + ".txt", lpexMsg);
+				//writeToFileDefault(deviceId + "_" + timestamp + ".csv", csvMsg);
+				//writeToFileDefault(deviceId + "_" + timestamp + ".txt", lpexMsg);
 }				
 }
